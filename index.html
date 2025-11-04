@@ -1,11 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="fi">
 <head>
-  <meta charset="UTF-8">
-  <title>Enni</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eripari-Enni — glitch mode</title>
+
+<style>
+body {
+  background: black;
+  color: #00ff9e;
+  font-family: "Courier New", monospace;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.crt {
+  animation: flicker 0.2s infinite;
+  text-shadow: 0 0 2px #00ff9e;
+}
+
+@keyframes flicker {
+  0% {opacity: .97;}
+  50% {opacity: 1;}
+  100% {opacity: .95;}
+}
+
+/* Scanline effect */
+body:before {
+  content:"";
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(
+    transparent 0px, transparent 2px, rgba(0,255,158,0.08) 3px
+  );
+  pointer-events:none;
+}
+
+/* Center wrapper */
+.wrapper {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 20vh;
+}
+
+/* Button */
+button {
+  background:black;
+  border:1px solid #00ff9e;
+  color:#00ff9e;
+  padding:12px 22px;
+  font-size:1.1rem;
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  border-radius:4px;
+}
+button:hover {
+  background:#00ff9e;
+  color:black;
+}
+
+/* cursor */
+.cursor {
+  display:inline-block;
+  width:10px;
+  background:#00ff9e;
+  animation: blink 0.7s infinite;
+}
+@keyframes blink {
+  50% {background:transparent;}
+}
+</style>
 </head>
-<body style="font-family: monospace; background:black; color:#00ff99; padding:30px;">
-  <h1>Hello world 👋</h1>
-  <p>Sivu toimii! 🎉</p>
+
+<body class="crt">
+
+<div class="wrapper">
+  <pre id="output"></pre>
+  <span class="cursor"></span>
+  <br><br>
+  <button onclick="start()">Testaa spontaaniutesi</button>
+</div>
+
+<audio id="tick" src="tick.mp3" preload="auto"></audio>
+
+<script>
+const text = `
+profile: Enni v1.0
+mode: Eripari-Enni
+status: experimental
+
+DEFAULT STATE
+  alignment: symmetry
+  logic: strict
+  chaos_tolerance: low
+
+TONIGHT STATE
+  alignment: asymmetry_allowed
+  spontaneity: beta_mode_enabled ♥️
+  logic: loosened
+  chaos_tolerance: slightly_less_low
+  patch: playful_unexpectedness
+
+note: system anomaly intentionally activated
+warning: unusual behavior may occur
+thank you: for supporting glitch-mode human testing ✨
+`;
+
+let speed = 90; // text speed (ms per char)
+let i = 0;
+
+function start() {
+  i = 0;
+  document.getElementById("output").textContent = "";
+  typeWriter();
+}
+
+function typeWriter() {
+  const output = document.getElementById("output");
+  const tick = document.getElementById("tick");
+
+  if (i < text.length) {
+    const char = text.charAt(i);
+    output.textContent += char;
+
+    if (char === "\n") {
+      tick.currentTime = 0;
+      tick.play();
+    }
+
+    i++;
+    setTimeout(typeWriter, speed + Math.random()*200); // human-ish randomness
+  }
+}
+</script>
+
 </body>
 </html>
