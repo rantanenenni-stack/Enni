@@ -1,5 +1,4 @@
-<audio id="typeSound" src="crt_blip.wav" preload="auto"></audio>
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fi">
 <head>
 <meta charset="UTF-8" />
@@ -14,19 +13,15 @@ body {
   padding: 20px;
   overflow: hidden;
 }
-
 .crt {
   animation: flicker 0.2s infinite;
   text-shadow: 0 0 2px #00ff9e;
 }
-
 @keyframes flicker {
   0% {opacity: .97;}
   50% {opacity: 1;}
   100% {opacity: .95;}
 }
-
-/* Scanline effect */
 body:before {
   content:"";
   position:fixed;
@@ -36,15 +31,11 @@ body:before {
   );
   pointer-events:none;
 }
-
-/* Center wrapper */
 .wrapper {
   max-width: 600px;
   margin: auto;
   margin-top: 20vh;
 }
-
-/* Button */
 button {
   background:black;
   border:1px solid #00ff9e;
@@ -60,8 +51,6 @@ button:hover {
   background:#00ff9e;
   color:black;
 }
-
-/* cursor */
 .cursor {
   display:inline-block;
   width:10px;
@@ -76,14 +65,14 @@ button:hover {
 
 <body class="crt">
 
+<audio id="typeSound" src="crt_blip.wav" preload="auto"></audio>
+<audio id="tick" src="tick.mp3" preload="auto"></audio>
+
 <div class="wrapper">
-  <pre id="output"></pre>
-  <span class="cursor"></span>
+  <pre id="output"></pre><span class="cursor"></span>
   <br><br>
   <button onclick="start()">Testaa spontaaniutesi</button>
 </div>
-
-<audio id="tick" src="tick.mp3" preload="auto"></audio>
 
 <script>
 const text = `
@@ -108,60 +97,54 @@ warning: unusual behavior may occur
 thank you: for supporting glitch-mode human testing ✨
 `;
 
-let speed = 90; // text speed (ms per char)
 let i = 0;
+let speed = 90;
 
 function start() {
   i = 0;
-  document.getElementById("output").textContent = "";
+  output.textContent = "";
   typeWriter();
 }
 
 function typeWriter() {
-  const output = document.getElementById("output");
-  const tick = document.getElementById("tick");
-
   if (i < text.length) {
     const char = text.charAt(i);
     output.textContent += char;
 
+    // Play sound on newline
     if (char === "\n") {
       tick.currentTime = 0;
       tick.play();
     }
 
     i++;
-    setTimeout(typeWriter, speed + Math.random()*200); // human-ish randomness
+    setTimeout(typeWriter, speed + Math.random()*200);
   }
 }
-</script>
 
-</body>
-</html>
-
-<script>
-const lines = [
+// Intro glitch lines before button click
+const introLines = [
   "Enni v1.0 initializing...",
   "Mode: Eripari-Enni",
   "Spontaneisuus: KÄYNNISTETTY (kokeilu)",
   "Valmius epäsymmetriaan: YES",
   "⚠️ Odottamaton käytös mahdollista",
-  "Kiitos, kun kestät tämän päivityksen ❤️"
+  "Kiitos kun kestät tämän päivityksen ❤️"
 ];
 
-let i = 0;
-
+let introIndex = 0;
 function printLines() {
-  const container = document.getElementById("output");
-  if (i < lines.length) {
-    container.innerHTML += lines[i] + "<br>";
-    document.getElementById("typeSound").play();  // 🔊 *blip*
-    i++;
-    setTimeout(printLines, 1200); // hidastettu rytmi
+  if (introIndex < introLines.length) {
+    output.innerHTML += introLines[introIndex] + "<br>";
+    typeSound.currentTime = 0;
+    typeSound.play();
+    introIndex++;
+    setTimeout(printLines, 1200);
   }
 }
 
 window.onload = printLines;
 </script>
-<div id="output"></div>
 
+</body>
+</html>
