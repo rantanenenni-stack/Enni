@@ -136,8 +136,7 @@ let introIndex = 0;
 function printLines() {
   if (introIndex < introLines.length) {
     output.innerHTML += introLines[introIndex] + "<br>";
-    typeSound.currentTime = 0;
-    typeSound.play();
+    
     introIndex++;
     setTimeout(printLines, 1200);
   }
