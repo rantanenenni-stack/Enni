@@ -138,3 +138,28 @@ function typeWriter() {
 
 </body>
 </html>
+
+<script>
+const lines = [
+  "Enni v1.0 initializing...",
+  "Mode: Eripari-Enni",
+  "Spontaneisuus: KÄYNNISTETTY (kokeilu)",
+  "Valmius epäsymmetriaan: YES",
+  "⚠️ Odottamaton käytös mahdollista",
+  "Kiitos, kun kestät tämän päivityksen ❤️"
+];
+
+let i = 0;
+
+function printLines() {
+  const container = document.getElementById("output");
+  if (i < lines.length) {
+    container.innerHTML += lines[i] + "<br>";
+    document.getElementById("typeSound").play();  // 🔊 *blip*
+    i++;
+    setTimeout(printLines, 1200); // hidastettu rytmi
+  }
+}
+
+window.onload = printLines;
+</script>
