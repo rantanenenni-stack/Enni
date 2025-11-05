@@ -3,79 +3,62 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Eripari-Enni — järjestelmäpoikkeama</title>
+<title>Eripari-Enni — glitch mode</title>
 
 <style>
 body {
   background: black;
   color: #00ff9e;
   font-family: "Courier New", monospace;
-  padding: 16px;
-  overflow-x: hidden;
+  padding: 20px;
+  overflow: hidden;
 }
-
 .crt {
   animation: flicker 0.2s infinite;
   text-shadow: 0 0 2px #00ff9e;
 }
 @keyframes flicker {
-  0% {opacity:.97;}
-  50% {opacity:1;}
-  100% {opacity:.95;}
+  0% {opacity: .97;}
+  50% {opacity: 1;}
+  100% {opacity: .95;}
 }
-
-/* Scanlines */
 body:before {
   content:"";
   position:fixed;
-  inset:0;
-  background:repeating-linear-gradient(
+  top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(
     transparent 0px, transparent 2px, rgba(0,255,158,0.08) 3px
   );
   pointer-events:none;
 }
-
-/* Center content */
 .wrapper {
-  max-width: 480px;
+  max-width: 600px;
   margin: auto;
-  margin-top: 18vh;
+  margin-top: 20vh;
 }
-
-/* Button */
 button {
   background:black;
   border:1px solid #00ff9e;
   color:#00ff9e;
-  padding:14px 24px;
+  padding:12px 22px;
   font-size:1.1rem;
   cursor:pointer;
   text-transform:uppercase;
   letter-spacing:2px;
   border-radius:4px;
-  width:100%;
 }
 button:hover {
   background:#00ff9e;
   color:black;
 }
-
-/* Cursor blink */
 .cursor {
   display:inline-block;
   width:10px;
   background:#00ff9e;
-  animation:blink .7s infinite;
+  animation: blink 0.7s infinite;
 }
 @keyframes blink {
   50% {background:transparent;}
-}
-
-pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  line-height: 1.4;
-  font-size: 0.95rem;
 }
 </style>
 </head>
@@ -85,40 +68,38 @@ pre {
 <audio id="tick" src="tick.wav" preload="auto"></audio>
 
 <div class="wrapper">
-  <pre id="output"></pre><span class="cursor"></span>
+  <pre id="output" style="white-space: pre-wrap;"></pre><span class="cursor"></span>
   <br><br>
-  <button id="startBtn" onclick="start()">Aloita</button>
+  <button onclick="start()">Aloita</button>
 </div>
 
 <script>
 const text = `
 Profiili: Enni v1.0
-Tila: Eripari-Enni (kokeilu)
+Tila: Eripari-Enni
+Status: kokeellinen
 
-NORMAALITILA:
-  symmetria: päällä
-  logiikka: tiukka
-  kaaoksensieto: matala
-  spontaanius: pois käytöstä
+OLETUSTILA
+  Symmetria: vaadittu
+  Logiikka: tiukka
+  Kaaoksensieto: matala
 
-TÄNÄ ILTANA:
-  symmetria: ei vaadita
-  spontaanius: kokeilumuoto aktivoitu ♥️
-  logiikka: kevennetty
-  kaaoksensieto: hieman kohotettu
-  päivitys: leikkisä arvaamattomuus
+TÄNÄ ILTANA
+  Symmetria: sallittu epäsymmetria
+  Spontaanius: käynnistetty ♥️
+  Logiikka: vähän löysempi
+  Kaaoksensieto: hieman korkeampi
+  Lisäys: yllättävyys-protokolla
 
-Huomio: hallittu järjestelmäpoikkeama
-Varoitus: epätavallinen toiminta mahdollista
-Kiitos: että siedät tämän kokeen ✨ ❤️
-  
+Huom: Tämä pieni inhimillinen "bugihupi" on tarkoituksella päällä
+Varoitus: yllättävää käytöstä voi esiintyä
+Kiitos: että testaat tätä versiota ✨💙
 `;
 
 let i = 0;
-let speed = 85;
+let speed = 90;
 
 function start() {
-  document.getElementById("startBtn").style.display = "none";
   i = 0;
   output.textContent = "";
   typeWriter();
@@ -135,9 +116,28 @@ function typeWriter() {
     }
 
     i++;
-    setTimeout(typeWriter, speed + Math.random() * 120);
+    setTimeout(typeWriter, speed + Math.random()*200);
   }
 }
+
+const introLines = [
+  "Enni v1.0 käynnistyy...",
+  "Tila: Eripari-Enni",
+  "Spontaanisuus: AKTIIVOITU (testi)",
+  "Epäsymmetria: HYVÄKSYTTY",
+  "⚠️ Mahdollinen odottamaton käytös",
+  "Kiitos, että olet mukana ❤️"
+];
+
+let introIndex = 0;
+function printLines() {
+  if (introIndex < introLines.length) {
+    output.innerHTML += introLines[introIndex] + "<br>";
+    introIndex++;
+    setTimeout(printLines, 1200);
+  }
+}
+window.onload = printLines;
 </script>
 
 </body>
